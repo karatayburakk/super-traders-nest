@@ -31,8 +31,10 @@ export class PortfoliosController {
   }
 
   @Get()
-  getUserPortfolios(@CurrentUser('id') userId: number): Promise<Portfolio[]> {
-    return this.portfoliosService.getUserPortfolios(userId);
+  getUserPortfolioWithShares(
+    @CurrentUser('id') userId: number,
+  ): Promise<Portfolio> {
+    return this.portfoliosService.getUserPortfolioWithShares(userId);
   }
 
   @Patch(':id')

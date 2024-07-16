@@ -17,9 +17,8 @@ export class PortfoliosRepository {
     });
   }
 
-  // TODO
-  getUserPortfolios(userId: number): Promise<Portfolio[]> {
-    return this.prisma.portfolio.findMany({
+  getUserPortfolioWithShares(userId: number): Promise<Portfolio> {
+    return this.prisma.portfolio.findUnique({
       where: { userId },
       include: { portfolioShares: true },
     });
