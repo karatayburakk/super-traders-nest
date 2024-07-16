@@ -9,15 +9,80 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "postgresql" // Change this to your database provider
   url      = env("DATABASE_URL")
 }
 
 model User {
   id Int @default(autoincrement()) @id
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt 
+  
+  email      String      @unique
+  password   String
+
+  portfolio Portfolio?
+}
+
+model Portfolio {
+  id            Int               @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt 
+
+  portfolioName String            @unique
+
+  userId        Int @unique
+  user          User              @relation(fields: [userId], references: [id])
+
+  portfolioShares        PortfolioShare[]
+  transactions Transaction[]
+}
+
+model Share {
+  id         Int               @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt 
+
+  symbol     String            @unique
+  latestPrice Float
+
+  portfolioShares PortfolioShare[]
+  transactions Transaction[]
+}
+
+model PortfolioShare {
+  id        Int      @default(autoincrement()) @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt 
+
+  shareId     Int
+  portfolioId Int
+  share       Share    @relation(fields: [shareId], references: [id])
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id])
+
+  quantity Int
+ 
+  @@unique([shareId, portfolioId])
+}
+
+model Transaction {
+  id Int @default(autoincrement()) @id
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  email String @unique
-  password String
+  shareId     Int
+  portfolioId Int
+  share       Share    @relation(fields: [shareId], references: [id])
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id])
+  
+  transactionType TransactionType
+  price Decimal @default(0.00)
+  quantity Int
+  transactionDate DateTime @default(now())
+
+}
+
+enum TransactionType {
+  BUY
+  SELL
 }
