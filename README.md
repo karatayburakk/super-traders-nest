@@ -1,73 +1,108 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# EvaExchange - Trading Application
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+The EvaExchange application is an arbitrarily trading game designed to educate users on the terminology used in the trading of shares. 
+Users can register shares, update prices, and perform trading operations (BUY/SELL) on shares.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Table of Contents
 
-## Description
+- [Introduction](#introduction)
+- [Features](#features)
+- [Technologies](#technologies)
+- [Installation](#installation)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Introduction
+
+The EvaExchange application provides a platform for users to learn and engage in the trading of shares.
+Users can register shares, update prices, and perform BUY/SELL transactions on registered shares. The application ensures that all trading rules and validations are adhered to.
+
+- There is a Postman collection with all the endpoints and example usage available in the /postman folder.
+- For usage of Postman, create environment with url (localhost:3000) and jwt variables, jwt will be set automatically with signup and signin
+
+## Features
+
+- User registration with time zone support -> {{url}}/auth/signup POST
+- User signs the application with time zone preserved -> {{url}}/auth/signin POST
+- User sees account info with total coins owned -> {{url}}/users/info GET
+- System healtch can be checked -> {{url}}/health GET
+- Create a portfolio -> {{url}}/portfolios POST
+- Get user portfolios -> {{url}}/portfolios GET
+- Update a portfolio -> {{url}}/portfolios/:id PATCH
+- Delete a portfolio -> {{url}}/portfolios/:id DELETE
+- Get all shares -> {{url}}/shares GET
+- Create a share -> {{url}}/shares POST
+- Update a share -> {{url}}/shares/:id PATCH
+- Delete a share -> {{url}}/shares/:id DELETE
+- Buy shares -> {{url}}/trades/buy POST
+- Sell shares -> {{url}}/trades/sell POST
+- Check system health -> {{url}}/health GET
+
+## Technologies
+
+- Node.js
+- NestJS
+- Prisma ORM
+- PostgreSQL
+- Docker (for containerization)
+- TypeScript
+- bcryptjs (for password hashing)
 
 ## Installation
 
-```bash
-$ yarn install
+### Prerequisites
+
+- Docker installed (the application and database are fully containerized and can be used with Docker)
+- For local usage: PostgreSQL (or your choice of database) set up, Node.js and yarn installed
+- For the application running as expected, database must be seeded, please follow steps accordingly.
+
+### Steps
+
+1. Set up environment variables. Create a `.env` file in the root directory and add the following (There is a template file .env.template):
+
+- DATABASE_URL="postgresql://<username>:<password>@<host>:<port>/<database>?schema=public"
+- SECRET_KEY="your_jwt_secret"
+
+2. Production Environment With Migrations And Seeds, Run the following command:
+
+```sh
+START_MODE=migrate docker-compose up
 ```
 
-## Running the app
+- This command starts a PostgreSQL database container, migrates and seeds the database, then starts the application.
 
-```bash
-# development
-$ yarn run start
+3. Production Environment, If Database migration and seed is completed already, you can run the following command:
 
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+```sh
+START_MODE=prod docker-compose up
 ```
 
-## Test
+- This command starts a PostgresSQL database container, then starts the application
 
-```bash
-# unit tests
-$ yarn run test
+4. Development Environment, Run the following command for Development mode, all the changes in src folder will restart the application automatically.
 
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+```sh
+docker-compose up
 ```
 
-## Support
+- This command starts a PostgresSQL database container (without migration and seed), then starts the application.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+5. For Local Development, Run following commands:
 
-## Stay in touch
+- Database should be up on and running
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- For Database Migration:
 
-## License
+```sh
+yarn migrate
+```
 
-Nest is [MIT licensed](LICENSE).
+- For Database seed:
+
+```sh
+yarn seed
+```
+
+- For Application running in development mode:
+
+```sh
+yarn start:dev
+```

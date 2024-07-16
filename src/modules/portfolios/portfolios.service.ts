@@ -18,8 +18,8 @@ export class PortfoliosService {
     );
   }
 
-  getUserPortfolios(userId: number): Promise<Portfolio[]> {
-    return this.portfoliosRepository.getUserPortfolios(userId);
+  getUserPortfolioWithShares(userId: number): Promise<Portfolio> {
+    return this.portfoliosRepository.getUserPortfolioWithShares(userId);
   }
 
   updatePortfolio(
